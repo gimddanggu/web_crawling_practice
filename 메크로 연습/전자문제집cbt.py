@@ -17,21 +17,39 @@ driver = webdriver.Chrome(options=options)
 print("다운받을 연도 범위를 입력하세요 (예: 2021 2023)")
 start, end = map(int, input("→ ").split())
 
+
+# 탐색 종료 조건
+## 다음 항목 가져왔을 때 가져오는 범위 벗어남 or 
+## 마지막 항목일 경우 다음 페이지까지 확인하기
+## 마지막 페이지일 경우 
+
+
+
 try:
     # 1. 사이트 접속
     driver.get(link)
     time.sleep(2)
 
     # 2. 게시글의 제목에서 해당년도 기출 찾기
-    list_area = driver.find_element(By.CSS_SELECTOR, ".bd_lst")
-    all_post = list_area.find_elements(By.CSS_SELECTOR, ".title .hx")
+    list_area = driver.find_element(By.CSS_SELECTOR, ".bd_lst") # 전체 덩어리
+    all_post = list_area.find_elements(By.CSS_SELECTOR, ".title .hx") # 덩어리 중 하나
+
 
     for post in all_post[:2]:
         url = post.get_attribute("href")
         url_list.append(url)
         time.sleep(2)  # 페이지 로딩 대기
 
+    text = all_post[-1].text
+    for t in text.split():
+        if "년" in t:
+            year = int(t.replace("년", ""))
 
+    if year <= end:
+        # 다음페이지로 이동
+        next_btn = driver.find_element("a.direction")
+        next_btn.click()
+        
     # 가져온 url 에 접속해 pdf 파일 다운로드
     for ur in url_list:
         driver.get(ur)
