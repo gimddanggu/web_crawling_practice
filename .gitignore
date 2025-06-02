@@ -192,3 +192,13 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+.ipynb_checkpoints/
+secrets.json
+credentials.json
+config.json
+
+# 개발 중 생성될 수 있는 임시파일
+*.log
+*.tmp
+*.note
